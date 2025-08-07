@@ -1,1 +1,26 @@
-repos: []
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-case-conflict
+      - id: detect-private-key
+#      - id: no-commit-to-branch # use it for protected branch
+#        args: [ --branch, main ]
+      - id: check-symlinks
+      - id: check-executables-have-shebangs
+      - id: check-docstring-first
+      - id: check-merge-conflict
+      - id: check-shebang-scripts-are-executable
+      - id: check-toml
+      - id: destroyed-symlinks
+      - id: check-vcs-permalinks
+      - id: fix-byte-order-marker
+      - id: check-added-large-files
+        args: ['--maxkb=100']
+# TODO: Add a custom hook to forbid non-English letters in source code,
+# while still allowing Unicode characters (e.g. emojis) in documentation files (.md, etc).
+# Do not enforce strict ASCII, as it blocks valid Unicode like emojis.

@@ -1,6 +1,6 @@
 # Developing
 
-This document provides guidance on building, testing, and optimizing CosmWasm smart 
+This document provides guidance on building, testing, and optimizing CosmWasm smart
 contracts in this repository. This file attempts to provide a brief overview, assuming
 you have installed a recent version of Rust already.
 
@@ -8,7 +8,7 @@ you have installed a recent version of Rust already.
 
 Before starting, make sure you have [rustup](https://rustup.rs/) along with a
 recent `rustc` and `cargo` version installed. The required Rust version is specified
-in the `rust-toolchain.toml` file in the root of this repository. Make sure 
+in the `rust-toolchain.toml` file in the root of this repository. Make sure
 your `rustup` environment is configured to respect it automatically.
 
 And you need to have the `wasm32-unknown-unknown` target installed as well.
