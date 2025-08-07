@@ -24,3 +24,12 @@ repos:
 # TODO: Add a custom hook to forbid non-English letters in source code,
 # while still allowing Unicode characters (e.g. emojis) in documentation files (.md, etc).
 # Do not enforce strict ASCII, as it blocks valid Unicode like emojis.
+
+  - repo: local
+    hooks:
+      - id: deny-todos
+        name: Deny TODOs and FIXMEs
+        entry: ./scripts/hooks/deny-todo-like.sh
+        language: script
+        types: [text]
+        always_run: true
