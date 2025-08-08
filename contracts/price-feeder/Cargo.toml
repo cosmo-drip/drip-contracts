@@ -1,10 +1,10 @@
 [package]
-name = "disburser"
+name = "price-feeder"
 version = "0.1.0"
 edition = "2021"
 license = "Apache-2.0"
-authors = ["Raumo0 <dharapko@gmail.com>"]
-description = "Contract for token disbursements in DRIP"
+authors = ["Alessandroo <https://github.com/Alessandroo>", "Raumo0 <dharapko@gmail.com>"]
+description = "Oracle contract for price data feeds in DRIP"
 repository = "https://github.com/cosmo-drip/drip-contracts"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html

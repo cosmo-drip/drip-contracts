@@ -1,6 +1,7 @@
 [workspace]
 members = [
   "contracts/disburser",
+  "contracts/price-feeder",
 ]
 
 [workspace.dependencies]
