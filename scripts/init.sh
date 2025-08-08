@@ -20,4 +20,29 @@ pre-commit install
 echo "==> Updating pre-commit hook versions..."
 pre-commit autoupdate
 
+echo "==> Checking for git-flow..."
+# Check if git-flow is installed
+if ! command -v git-flow &> /dev/null; then
+  echo "[ERROR] 'git-flow' is not installed."
+  echo "        You can install it for macOS:"
+  echo "          - brew install git-flow-avh"
+  echo "        You can install it for Linux:"
+  echo "          - $ sudo apt-get install git-flow"
+  exit 1
+else
+  echo "==> Initializing Git Flow..."
+
+  git flow init \
+    -f \
+    --feature    "feature/" \
+    --bugfix     "bugfix/" \
+    --release    "release/" \
+    --hotfix     "hotfix/" \
+    --support    "support/" \
+    --tag        "v" \
+    --defaults
+
+  echo "==> Git Flow initialized."
+fi
+
 echo "==> Done."
