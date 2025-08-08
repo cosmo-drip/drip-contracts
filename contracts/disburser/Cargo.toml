@@ -18,11 +18,7 @@ crate-type = ["cdylib", "rlib"]
 library = []
 
 [package.metadata.scripts]
-optimize = """docker run --rm -v "$(pwd)":/code \
-  --mount type=volume,source="$(basename "$(pwd)")_cache",target=/target \
-  --mount type=volume,source=registry_cache,target=/usr/local/cargo/registry \
-  cosmwasm/optimizer:0.15.0
-"""
+optimize-wasm = "../../scripts/optimize-wasm.sh ../../Cargo.lock"
 clean-schema = "rm -rf schema && mkdir -p schema"
 generate-schema = "rm -rf schema && mkdir -p schema && cargo run --bin schema"
 
