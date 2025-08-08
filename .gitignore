@@ -31,3 +31,6 @@
 
 # === GitHub Actions artifacts (optional) ===
 /artifacts/
+/contracts/disburser/artifacts/
+/contracts/price-feeder/artifacts/
+/contracts/factory/artifacts/
