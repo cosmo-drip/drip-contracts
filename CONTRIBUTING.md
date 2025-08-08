@@ -21,7 +21,9 @@ You can use the following prompt to help generate commit messages:
 > docs, test, style, build, ci), optionally followed by a scope in parentheses.
 > Use an imperative tone and keep the message under 70 characters. Focus only
 > on the purpose of the change, not the implementation details. Do not wrap the
-> commit message in any quotes, backticks, or code formatting.*
+> commit message in any quotes, backticks, or code formatting.
+> Please append the following line at the end of the commit message to reference the related ticket:
+> Refs: [TICKET-ID]*
 
 ## Development Setup
 
