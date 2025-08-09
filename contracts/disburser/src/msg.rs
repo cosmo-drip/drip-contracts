@@ -1,5 +1,5 @@
 use cosmwasm_schema::{cw_serde, QueryResponses};
-use cosmwasm_std::Coin;
+use cosmwasm_std::{Coin, Uint128, Decimal256};
 use cw_utils::Expiration;
 
 #[cw_serde]
@@ -21,7 +21,28 @@ pub struct InstantiateMsg {
 }
 
 #[cw_serde]
-pub enum ExecuteMsg {}
+pub enum ExecuteMsg {
+    RequestPayout {
+        amount_in_quote: Option<Uint128>,
+        ttl_sec: Option<u64>,
+        replace_pending: Option<bool>,
+    },
+    OnPriceCallback {
+        // TODO: rethink type for price and is timestamp needed?
+        price: Decimal256, // dec or num/den ?
+        // price_timestamp: u64, // ?
+        request_seq: u64,
+    },
+    Terminate {},
+    CancelPendingPayout {
+        expected_seq: Option<u64>,
+    },
+    UpdateAdmin { admin: Option<String> },
+    AddPaymentInitiator { addr: String },
+    RemovePaymentInitiator { addr: String },
+    UpdateWithdrawalTtl { ttl: WithdrawalTtl },
+    UpdatePriceFeeder { addr: String },
+}
 
 #[cw_serde]
 #[derive(QueryResponses)]

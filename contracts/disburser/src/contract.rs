@@ -69,9 +69,39 @@ pub fn execute(
     _deps: DepsMut,
     _env: Env,
     _info: MessageInfo,
-    _msg: ExecuteMsg,
+    msg: ExecuteMsg,
 ) -> Result<Response, ContractError> {
-    unimplemented!()
+    match msg {
+        ExecuteMsg::RequestPayout {
+            amount_in_quote,
+            ttl_sec,
+            replace_pending
+        } => unimplemented!(),
+        ExecuteMsg::OnPriceCallback {
+            price,
+            // price_timestamp,
+            request_seq
+        } => unimplemented!(),
+        ExecuteMsg::Terminate {} => unimplemented!(),
+        ExecuteMsg::CancelPendingPayout {
+            expected_seq
+        } => unimplemented!(),
+        ExecuteMsg::UpdateAdmin {
+            admin
+        } => unimplemented!(),
+        ExecuteMsg::AddPaymentInitiator {
+            addr
+        } => unimplemented!(),
+        ExecuteMsg::RemovePaymentInitiator {
+            addr
+        } => unimplemented!(),
+        ExecuteMsg::UpdatePriceFeeder {
+            addr
+        } => unimplemented!(),
+        ExecuteMsg::UpdateWithdrawalTtl {
+            ttl
+        } => unimplemented!(),
+    }
 }
 
 #[cfg_attr(not(feature = "library"), entry_point)]
