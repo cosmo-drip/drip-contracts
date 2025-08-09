@@ -45,4 +45,22 @@ else
   echo "==> Git Flow initialized."
 fi
 
+# Check config.mk
+CONFIG_FILE="config.mk"
+CONFIG_EXAMPLE_FILE="config.mk.example"
+
+echo "==> Checking for $CONFIG_FILE..."
+if [ ! -f "$CONFIG_FILE" ]; then
+  if [ -f "$CONFIG_EXAMPLE_FILE" ]; then
+    echo "==> $CONFIG_FILE not found. Copying from $CONFIG_EXAMPLE_FILE..."
+    cp "$CONFIG_EXAMPLE_FILE" "$CONFIG_FILE"
+    echo "==> Please update $CONFIG_FILE with your local settings."
+  else
+    echo "[WARNING] Neither $CONFIG_FILE nor $CONFIG_EXAMPLE_FILE found."
+    echo "          Please create $CONFIG_FILE manually."
+  fi
+else
+  echo "==> $CONFIG_FILE already exists. Skipping."
+fi
+
 echo "==> Done."

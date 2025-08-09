@@ -34,3 +34,6 @@
 /contracts/disburser/artifacts/
 /contracts/price-feeder/artifacts/
 /contracts/factory/artifacts/
+
+# Dev configs
+config.mk

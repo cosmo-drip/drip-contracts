@@ -1,3 +1,4 @@
+-include config.mk
 .PHONY: setup disburser-wasm schema optimize wasm unit-test integration-test multitest
 
 disburser-wasm:
@@ -38,3 +39,29 @@ schema:
 		echo "Generating schema in $$dir..."; \
 		cd $$dir && rm -rf schema && mkdir -p schema && cargo run --bin schema; \
 	done
+
+# Ensure config.mk exists and has valid values.
+# If missing, run `make setup` to create it from config.mk.example, then update values manually.
+store-code:
+	$(DAEMON) tx wasm store artifacts/disburser.wasm \
+		--from $(FROM) \
+		--chain-id $(CHAIN_ID) \
+		--node $(NODE_URL) \
+		--gas auto \
+		--gas-adjustment $(GAS_ADJ) \
+		--fees $(FEES) \
+		-y
+
+# Ensure config.mk exists and has valid values.
+# If missing, run `make setup` to create it from config.mk.example, then update values manually.
+instantiate:
+	gaiad tx wasm instantiate $(CONTRACT_CODE_ID) '{   "admin": "ipsum quis ut esse",   "funding_expiration": {     "at_time": "1754800000"   },   "payment_initiator_addrs": [     "culpa nulla ut nostrud cupidatat",     "pariatur",     "ullamco sunt tempor velit",     "laboris"   ],   "price_feeder_addr": "sed enim proident",   "quote_asset_limit": {     "amount": "123",     "denom": "nostrud"   },   "recipient_addr": "deserunt reprehenderit mollit",   "settlement_asset_limit": {     "amount": "123",     "denom": "cillum minim incididunt sed"   },   "withdrawal_ttl": {     "default_sec": 32629444,     "max_sec": 81188572   } }' \
+    --label "disbarser_instantiate_stub" \
+    --from $(FROM) \
+    --chain-id $(CHAIN_ID) \
+    --node $(NODE_URL) \
+    --no-admin \
+    --gas auto \
+    --gas-adjustment $(GAS_ADJ) \
+    --fees $(FEES) \
+    -y
