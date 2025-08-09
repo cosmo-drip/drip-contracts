@@ -10,4 +10,11 @@ pub enum ContractError {
     Unauthorized {},
     // Add any other custom errors you like here.
     // Look at https://docs.rs/thiserror/1.0.21/thiserror/ for details.
+
+    #[error("Invalid withdrawal TTL: must be > 0 and <= `max_sec` \
+    (got default_sec={default_sec}, max_sec={max_sec})")]
+    InvalidTtl {
+        default_sec: u64,
+        max_sec: u64,
+    },
 }

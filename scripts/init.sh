@@ -45,4 +45,28 @@ else
   echo "==> Git Flow initialized."
 fi
 
+check_and_copy() {
+  local config_file="$1"
+  local config_example_file="$2"
+  local red='\033[0;31m'
+  local reset='\033[0m'
+
+  echo "==> Checking for $config_file..."
+  if [ ! -f "$config_file" ]; then
+    if [ -f "$config_example_file" ]; then
+      echo "==> $config_file not found. Copying from $config_example_file..."
+      cp "$config_example_file" "$config_file"
+      echo -e "==> Please ${red}manually update${reset} $config_file with your local settings."
+    else
+      echo "[WARNING] Neither $config_file nor $config_example_file found."
+      echo "          Please create $config_file manually."
+    fi
+  else
+    echo "==> $config_file already exists. Skipping."
+  fi
+}
+
+check_and_copy "configs/config.mk" "configs/config.mk.example"
+check_and_copy "configs/instantiate_msg.json" "configs/instantiate_msg.json.example"
+
 echo "==> Done."

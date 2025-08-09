@@ -34,3 +34,7 @@
 /contracts/disburser/artifacts/
 /contracts/price-feeder/artifacts/
 /contracts/factory/artifacts/
+
+# Deploy configs
+configs/config.mk
+configs/instantiate_msg.json

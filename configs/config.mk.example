@@ -1,0 +1,7 @@
+DAEMON           = <daemon_name>                    # example: gaiad
+NODE_URL         = <node_rpc_addr>                  # example: http://127.0.0.1:26657
+CHAIN_ID         = <chain_id>                       # example: cosmoshub-4
+FROM             = <key_id_from_local_keyring>      # example: keyring-user-key
+FEES             = <tx_fees>                        # example: 20000uatom
+GAS_ADJ          = <tx_gas_adjustment>              # example: 1.2
+CONTRACT_CODE_ID = <contract_code_id_in_blockchain> # example: 123

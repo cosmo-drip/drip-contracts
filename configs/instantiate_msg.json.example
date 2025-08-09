@@ -1,0 +1,26 @@
+{
+  "admin": "<addr>",
+  "funding_expiration": {
+    "at_time": "1754800000"
+  },
+  "payment_initiator_addrs": [
+    "<addr>",
+    "<addr>",
+    "<addr>",
+    "<addr>"
+  ],
+  "price_feeder_addr": "<addr>",
+  "quote_asset_limit": {
+    "amount": "123",
+    "denom": "nostrud"
+  },
+  "recipient_addr": "<addr>",
+  "settlement_asset_limit": {
+    "amount": "123",
+    "denom": "cillum"
+  },
+  "withdrawal_ttl": {
+    "default_sec": 32629444,
+    "max_sec": 81188572
+  }
+}
