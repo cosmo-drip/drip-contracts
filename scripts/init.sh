@@ -66,7 +66,7 @@ check_and_copy() {
   fi
 }
 
-check_and_copy "config.mk" "config.mk.example"
-check_and_copy "instantiate_msg.json" "instantiate_msg.json.example"
+check_and_copy "configs/config.mk" "configs/config.mk.example"
+check_and_copy "configs/instantiate_msg.json" "configs/instantiate_msg.json.example"
 
 echo "==> Done."

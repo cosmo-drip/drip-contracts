@@ -1,4 +1,4 @@
--include config.mk
+-include configs/config.mk
 .PHONY: setup disburser-wasm schema optimize wasm unit-test integration-test multitest
 
 disburser-wasm:
@@ -52,7 +52,7 @@ deploy/store-code:
 		--fees $(FEES) \
 		-y
 
-INSTANTIATE_MSG := $(shell cat instantiate_msg.json)
+INSTANTIATE_MSG := $(shell cat configs/instantiate_msg.json)
 # Ensure config.mk exists and has valid values.
 # If missing, run `make setup` to create it from config.mk.example, then update values manually.
 deploy/instantiate:
