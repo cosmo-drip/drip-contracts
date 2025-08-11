@@ -2,7 +2,7 @@
 .PHONY: setup disburser-wasm schema optimize wasm unit-test integration-test multitest
 
 disburser-wasm:
-	cd contracts/disburser && cargo wasm
+	cd contracts/drip-disburser && cargo wasm
 
 ## Setup development environment (pre-commit, hooks, etc.)
 setup:
@@ -43,7 +43,7 @@ schema:
 # Ensure config.mk exists and has valid values.
 # If missing, run `make setup` to create it from config.mk.example, then update values manually.
 deploy/store-code:
-	$(DAEMON) tx wasm store artifacts/disburser.wasm \
+	$(DAEMON) tx wasm store artifacts/drip_disburser.wasm \
 		--from $(FROM) \
 		--chain-id $(CHAIN_ID) \
 		--node $(NODE_URL) \
