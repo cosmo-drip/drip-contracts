@@ -33,7 +33,7 @@
 /artifacts/
 /contracts/disburser/artifacts/
 /contracts/price-feeder/artifacts/
-/contracts/factory/artifacts/
+/contracts/drip-disburser-factory/artifacts/
 
 # Deploy configs
 configs/config.mk
