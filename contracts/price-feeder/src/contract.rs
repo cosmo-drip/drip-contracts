@@ -4,7 +4,7 @@ use cosmwasm_std::{Binary, Deps, DepsMut, Env, MessageInfo, Response, StdResult}
 use cw2::set_contract_version;
 
 use crate::error::ContractError;
-use crate::msg::{ExecuteMsg, InstantiateMsg, PriceFetchMode, QueryMsg};
+use crate::msg::{ExecuteMsg, InstantiateMsg, QueryMsg};
 use crate::state::{Config, CONFIG};
 
 // version info for migration info
@@ -23,10 +23,6 @@ pub fn instantiate(
         Some(a) => deps.api.addr_validate(a)?,
         None => info.sender.clone(),
     };
-    let price_fetch_mode = match &msg.price_fetch_mode {
-        Some(mode) => mode.clone(),
-        None => PriceFetchMode::Async,
-    };
     let whitelisted_caller_addrs = msg
         .whitelisted_caller_addrs
         .into_iter()
@@ -37,7 +33,6 @@ pub fn instantiate(
     let cfg = Config {
         admin,
         twap_setting: msg.twap_setting,
-        price_fetch_mode,
         whitelisted_caller_addrs,
     };
     CONFIG.save(deps.storage, &cfg)?;
@@ -71,9 +66,6 @@ pub fn execute(
         } => unimplemented!(),
         ExecuteMsg::ModifyAdmin {
             new_admin,
-        } => unimplemented!(),
-        ExecuteMsg::ModifyPriceFetchMode {
-            new_price_fetch_mode,
         } => unimplemented!(),
     }
 }

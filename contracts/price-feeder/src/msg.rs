@@ -4,7 +4,6 @@ use cosmwasm_schema::{cw_serde, QueryResponses};
 pub struct InstantiateMsg {
     pub admin: Option<String>,
     pub twap_setting: TwapSetting,
-    pub price_fetch_mode: Option<PriceFetchMode>,
     pub whitelisted_caller_addrs: Vec<String>,
 }
 
@@ -15,13 +14,6 @@ pub struct TwapSetting {
     pub quote_asset: String,
     pub base_twap_asset: String,
     pub quote_twap_asset: String,
-}
-
-#[cw_serde]
-pub enum PriceFetchMode {
-    Sync,
-    Async,
-    Combined
 }
 
 #[cw_serde]
@@ -41,9 +33,6 @@ pub enum ExecuteMsg {
     },
     ModifyAdmin {
         new_admin: String,
-    },
-    ModifyPriceFetchMode {
-        new_price_fetch_mode: PriceFetchMode,
     },
 }
 
