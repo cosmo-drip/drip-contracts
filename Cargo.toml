@@ -1,7 +1,7 @@
 [workspace]
 members = [
-  "contracts/disburser",
-  "contracts/price-feeder",
+  "contracts/drip-disburser",
+  "contracts/drip-price-adapter-twap-ibc",
 ]
 resolver = "2"
 

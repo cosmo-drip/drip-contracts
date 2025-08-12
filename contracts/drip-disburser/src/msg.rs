@@ -4,8 +4,10 @@ use cw_utils::Expiration;
 
 #[cw_serde]
 pub struct WithdrawalTtl {
+    // todo: change it to expiration analog with relative duration in sec or blocks
     pub default_sec: u64,
     pub max_sec: u64,
+    // todo: do we need to add Option<min_sec>?
 }
 
 #[cw_serde]
@@ -24,9 +26,11 @@ pub struct InstantiateMsg {
 pub enum ExecuteMsg {
     RequestPayout {
         amount_in_quote: Option<Uint128>,
-        ttl_sec: Option<u64>,
+        ttl_sec: Option<u64>, // todo: change it to expiration
         replace_pending: Option<bool>,
     },
+    // todo: do we need to add OnTimeoutCallback?
+    // todo: mb rename OnPriceCallback endpoint to OnPriceAsk?
     OnPriceCallback {
         // TODO: rethink type for price and is timestamp needed?
         price: Decimal256, // dec or num/den ?

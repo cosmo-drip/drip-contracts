@@ -1,6 +1,6 @@
 use cosmwasm_schema::write_api;
 
-use price_feeder::msg::{ExecuteMsg, InstantiateMsg, QueryMsg};
+use drip_price_adapter_twap_ibc::msg::{ExecuteMsg, InstantiateMsg, QueryMsg};
 
 fn main() {
     write_api! {

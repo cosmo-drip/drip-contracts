@@ -31,9 +31,9 @@
 
 # === GitHub Actions artifacts (optional) ===
 /artifacts/
-/contracts/disburser/artifacts/
-/contracts/price-feeder/artifacts/
-/contracts/factory/artifacts/
+/contracts/drip-disburser/artifacts/
+/contracts/drip-price-adapter-twap-ibc/artifacts/
+/contracts/drip-disburser-factory/artifacts/
 
 # Deploy configs
 configs/config.mk

@@ -511,7 +511,23 @@ dependencies = [
 ]
 
 [[package]]
-name = "disburser"
+name = "drip-disburser"
+version = "0.1.0"
+dependencies = [
+ "cosmwasm-schema",
+ "cosmwasm-std",
+ "cw-controllers",
+ "cw-multi-test",
+ "cw-storage-plus",
+ "cw-utils",
+ "cw2",
+ "schemars",
+ "serde",
+ "thiserror 1.0.69",
+]
+
+[[package]]
+name = "drip-price-adapter-twap-ibc"
 version = "0.1.0"
 dependencies = [
  "cosmwasm-schema",
@@ -783,22 +799,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "85eae3c4ed2f50dcfe72643da4befc30deadb458a9b590d720cde2f2b1e97da9"
 dependencies = [
  "zerocopy",
-]
-
-[[package]]
-name = "price-feeder"
-version = "0.1.0"
-dependencies = [
- "cosmwasm-schema",
- "cosmwasm-std",
- "cw-controllers",
- "cw-multi-test",
- "cw-storage-plus",
- "cw-utils",
- "cw2",
- "schemars",
- "serde",
- "thiserror 1.0.69",
 ]
 
 [[package]]
