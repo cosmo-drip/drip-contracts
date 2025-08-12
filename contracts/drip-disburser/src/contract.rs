@@ -4,10 +4,11 @@ use cosmwasm_std::{
     Binary, Deps, DepsMut, Env, MessageInfo, Response, StdResult, ensure
 };
 use cw2::set_contract_version;
-
+use drip_disburser_interface::msg::{
+    ExecuteMsg, InstantiateMsg, QueryMsg
+};
 
 use crate::error::ContractError;
-use crate::msg::{ExecuteMsg, InstantiateMsg, QueryMsg};
 use crate::state::{Config, CONFIG};
 
 // version info for migration info

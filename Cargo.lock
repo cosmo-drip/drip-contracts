@@ -521,6 +521,23 @@ dependencies = [
  "cw-storage-plus",
  "cw-utils",
  "cw2",
+ "drip-disburser-interface",
+ "schemars",
+ "serde",
+ "thiserror 1.0.69",
+]
+
+[[package]]
+name = "drip-disburser-interface"
+version = "0.1.0"
+dependencies = [
+ "cosmwasm-schema",
+ "cosmwasm-std",
+ "cw-controllers",
+ "cw-multi-test",
+ "cw-storage-plus",
+ "cw-utils",
+ "cw2",
  "schemars",
  "serde",
  "thiserror 1.0.69",

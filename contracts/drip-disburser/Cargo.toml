@@ -1,11 +1,11 @@
 [package]
 name = "drip-disburser"
-version = "0.1.0"
-edition = "2021"
-license = "Apache-2.0"
-authors = ["Raumo0 <dharapko@gmail.com>"]
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
 description = "Contract for token disbursements in DRIP"
-repository = "https://github.com/cosmo-drip/drip-contracts"
+repository.workspace = true
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -32,6 +32,7 @@ serde.workspace = true
 thiserror.workspace = true
 cw-utils.workspace = true
 cw-controllers.workspace = true
+drip-disburser-interface.workspace = true
 
 [dev-dependencies]
 cw-multi-test.workspace = true

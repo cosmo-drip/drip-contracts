@@ -1,6 +1,6 @@
 use cosmwasm_schema::write_api;
 
-use drip_disburser::msg::{ExecuteMsg, InstantiateMsg, QueryMsg};
+use drip_disburser_interface::msg::{ExecuteMsg, InstantiateMsg, QueryMsg};
 
 fn main() {
     write_api! {
