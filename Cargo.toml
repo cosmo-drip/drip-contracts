@@ -1,6 +1,7 @@
 [workspace]
 members = [
   "contracts/drip-disburser",
+  "contracts/drip-price-oracle",
   "contracts/drip-price-adapter-twap-ibc",
   "packages/interfaces/drip-disburser-interface"
 ]
