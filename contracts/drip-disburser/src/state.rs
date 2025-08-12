@@ -2,7 +2,7 @@ use cosmwasm_schema::cw_serde;
 use cosmwasm_std::{Addr, Coin};
 use cw_storage_plus::Item;
 use cw_utils::Expiration;
-use crate::msg::WithdrawalTtl;
+use crate::msg::DurationBounds;
 
 #[cw_serde]
 pub struct Config {
@@ -13,7 +13,7 @@ pub struct Config {
     pub price_feeder_addr: Addr,
     pub payment_initiator_addrs: Vec<Addr>,
     pub funding_expiration: Expiration,
-    pub withdrawal_ttl: WithdrawalTtl,
+    pub payout_duration_bounds: DurationBounds,
 }
 
 pub const CONFIG: Item<Config> = Item::new("config");

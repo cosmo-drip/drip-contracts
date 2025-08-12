@@ -1,13 +1,25 @@
 use cosmwasm_schema::{cw_serde, QueryResponses};
-use cosmwasm_std::{Coin, Uint128, Decimal256};
+use cosmwasm_std::{Coin, Uint128, Decimal};
 use cw_utils::Expiration;
 
 #[cw_serde]
-pub struct WithdrawalTtl {
-    // todo: change it to expiration analog with relative duration in sec or blocks
-    pub default_sec: u64,
-    pub max_sec: u64,
-    // todo: do we need to add Option<min_sec>?
+pub enum Duration {
+    Blocks(u64),
+    Seconds(u64),
+    // NoExpiry {},
+}
+
+#[cw_serde]
+pub struct DurationLimit {
+    blocks: u64,
+    seconds: u64,
+}
+
+#[cw_serde]
+pub struct DurationBounds {
+    pub default: DurationLimit,
+    pub max: Option<DurationLimit>,
+    pub min: Option<DurationLimit>,
 }
 
 #[cw_serde]
@@ -16,26 +28,25 @@ pub struct InstantiateMsg {
     pub quote_asset_limit: Coin,
     pub admin: Option<String>,
     pub recipient_addr: String,
-    pub price_feeder_addr: String,
+    pub oracle_addr: String,
     pub payment_initiator_addrs: Vec<String>,
     pub funding_expiration: Expiration,
-    pub withdrawal_ttl: WithdrawalTtl,
+    pub payout_duration_bounds: DurationBounds,
 }
 
 #[cw_serde]
 pub enum ExecuteMsg {
     RequestPayout {
         amount_in_quote: Option<Uint128>,
-        ttl_sec: Option<u64>, // todo: change it to expiration
+        duration_limit: Option<Duration>,
         replace_pending: Option<bool>,
     },
-    // todo: do we need to add OnTimeoutCallback?
-    // todo: mb rename OnPriceCallback endpoint to OnPriceAsk?
-    OnPriceCallback {
-        // TODO: rethink type for price and is timestamp needed?
-        price: Decimal256, // dec or num/den ?
-        // price_timestamp: u64, // ?
-        request_seq: u64,
+    OnPayoutResponse {
+        price: Decimal,
+        request_id: u64,
+    },
+    OnPayoutTimeout {
+        request_id: u64,
     },
     Terminate {},
     CancelPendingPayout {
@@ -44,7 +55,7 @@ pub enum ExecuteMsg {
     UpdateAdmin { admin: Option<String> },
     AddPaymentInitiator { addr: String },
     RemovePaymentInitiator { addr: String },
-    UpdateWithdrawalTtl { ttl: WithdrawalTtl },
+    UpdateWithdrawalTtl { ttl: DurationBounds },
     UpdatePriceFeeder { addr: String },
 }
 

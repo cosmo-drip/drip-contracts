@@ -21,16 +21,7 @@ pub fn instantiate(
     info: MessageInfo,
     msg: InstantiateMsg,
 ) -> Result<Response, ContractError> {
-    // todo: add more checks
-    // basic parameters validation
-    ensure!(msg.withdrawal_ttl.default_sec > 0, ContractError::InvalidTtl {
-        default_sec: msg.withdrawal_ttl.default_sec,
-        max_sec: msg.withdrawal_ttl.max_sec,
-    });
-    ensure!(msg.withdrawal_ttl.default_sec <= msg.withdrawal_ttl.max_sec, ContractError::InvalidTtl {
-        default_sec: msg.withdrawal_ttl.default_sec,
-        max_sec: msg.withdrawal_ttl.max_sec,
-    });
+    // todo: add more checks & parameter validations
 
     // address normalization
     let admin = match &msg.admin {
@@ -38,7 +29,7 @@ pub fn instantiate(
         None => info.sender.clone(),
     };
     let recipient = deps.api.addr_validate(&msg.recipient_addr)?;
-    let feeder    = deps.api.addr_validate(&msg.price_feeder_addr)?;
+    let oracle = deps.api.addr_validate(&msg.oracle_addr)?;
     let initiators = msg
         .payment_initiator_addrs
         .into_iter()
@@ -51,10 +42,10 @@ pub fn instantiate(
         quote_asset_limit: msg.quote_asset_limit,
         admin,
         recipient_addr: recipient,
-        price_feeder_addr: feeder,
+        price_feeder_addr: oracle,
         payment_initiator_addrs: initiators,
         funding_expiration: msg.funding_expiration,
-        withdrawal_ttl: msg.withdrawal_ttl,
+        payout_duration_bounds: msg.payout_duration_bounds,
     };
     CONFIG.save(deps.storage, &cfg)?;
 
@@ -74,13 +65,13 @@ pub fn execute(
     match msg {
         ExecuteMsg::RequestPayout {
             amount_in_quote,
-            ttl_sec,
+            duration_limit: ttl_sec,
             replace_pending
         } => unimplemented!(),
-        ExecuteMsg::OnPriceCallback {
+        ExecuteMsg::OnPayoutResponse {
             price,
             // price_timestamp,
-            request_seq
+            request_id: request_seq
         } => unimplemented!(),
         ExecuteMsg::Terminate {} => unimplemented!(),
         ExecuteMsg::CancelPendingPayout {
@@ -100,6 +91,9 @@ pub fn execute(
         } => unimplemented!(),
         ExecuteMsg::UpdateWithdrawalTtl {
             ttl
+        } => unimplemented!(),
+        ExecuteMsg::OnPayoutTimeout {
+            request_id
         } => unimplemented!(),
     }
 }
