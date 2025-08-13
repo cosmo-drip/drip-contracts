@@ -3,7 +3,8 @@ members = [
   "contracts/drip-disburser",
   "contracts/drip-price-oracle",
   "contracts/drip-price-adapter-twap-ibc",
-  "packages/interfaces/drip-disburser-interface"
+  "packages/interfaces/drip-disburser-interface",
+  "packages/interfaces/drip-price-oracle-interface"
 ]
 resolver = "2"
 
@@ -43,3 +44,4 @@ cw-utils = "2.0.0"
 cw-controllers = "2.0.0"
 cw-multi-test = "2.0.0"
 drip-disburser-interface = { path = "packages/interfaces/drip-disburser-interface" }
+drip-price-oracle-interface = { path = "packages/interfaces/drip-price-oracle-interface" }

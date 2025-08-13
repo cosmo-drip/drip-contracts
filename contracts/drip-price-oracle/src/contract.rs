@@ -3,7 +3,11 @@ use cosmwasm_std::{entry_point, Binary, Deps, DepsMut, Env, MessageInfo, Respons
 use cosmwasm_std::{Reply, SubMsgResponse, SubMsgResult};
 use cw2::set_contract_version;
 use crate::ContractError;
-use crate::msg::{ExecuteMsg, InstantiateMsg, QueryMsg};
+use drip_price_oracle_interface::msg::{
+    ExecuteMsg,
+    InstantiateMsg,
+    QueryMsg
+};
 
 // version info for migration info
 const CONTRACT_NAME: &str = "crates.io:drip-price-oracle";

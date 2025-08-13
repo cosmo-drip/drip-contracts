@@ -1,26 +1,21 @@
 [package]
-name = "drip-price-oracle"
+name = "drip-price-oracle-interface"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
 authors.workspace = true
-description = "Oracle contract that retrieves and aggregates token prices from multiple price adapters"
+description = "Message and type definitions for interacting with the DRIP Oracle contract"
 repository.workspace = true
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [lib]
-crate-type = ["cdylib", "rlib"]
+crate-type = ["cdylib", "rlib"] # todo: do we need this?
 
 [features]
 # use library feature to disable all instantiate/execute/query exports
 # default = ["library"]
 library = []
-
-[package.metadata.scripts]
-optimize-wasm = "../../scripts/optimize-wasm.sh ../../Cargo.lock"
-clean-schema = "rm -rf schema && mkdir -p schema"
-generate-schema = "rm -rf schema && mkdir -p schema && cargo run --bin schema"
 
 [dependencies]
 cosmwasm-schema.workspace = true
@@ -32,7 +27,6 @@ serde.workspace = true
 thiserror.workspace = true
 cw-utils.workspace = true
 cw-controllers.workspace = true
-drip-price-oracle-interface.workspace = true
 
 [dev-dependencies]
 cw-multi-test.workspace = true
