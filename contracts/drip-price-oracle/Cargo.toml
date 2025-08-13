@@ -1,0 +1,38 @@
+[package]
+name = "drip-price-oracle"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Oracle contract that retrieves and aggregates token prices from multiple price adapters"
+repository.workspace = true
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+# use library feature to disable all instantiate/execute/query exports
+# default = ["library"]
+library = []
+
+[package.metadata.scripts]
+optimize-wasm = "../../scripts/optimize-wasm.sh ../../Cargo.lock"
+clean-schema = "rm -rf schema && mkdir -p schema"
+generate-schema = "rm -rf schema && mkdir -p schema && cargo run --bin schema"
+
+[dependencies]
+cosmwasm-schema.workspace = true
+cosmwasm-std.workspace = true
+cw-storage-plus.workspace = true
+cw2.workspace = true
+schemars.workspace = true
+serde.workspace = true
+thiserror.workspace = true
+cw-utils.workspace = true
+cw-controllers.workspace = true
+#drip-disburser-interface.workspace = true
+
+[dev-dependencies]
+cw-multi-test.workspace = true
