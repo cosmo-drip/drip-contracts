@@ -554,8 +554,11 @@ dependencies = [
  "cw-storage-plus",
  "cw-utils",
  "cw2",
+ "drip-disburser-interface",
+ "prost",
  "schemars",
  "serde",
+ "sha2",
  "thiserror 1.0.69",
 ]
 

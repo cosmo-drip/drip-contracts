@@ -1,11 +1,11 @@
+use crate::error::ContractError;
+use crate::execute;
+use crate::msg::{ExecuteMsg, InstantiateMsg, QueryMsg};
+use crate::state::{Config, CONFIG, TWAP_SETTINGS};
 #[cfg(not(feature = "library"))]
 use cosmwasm_std::entry_point;
 use cosmwasm_std::{Binary, Deps, DepsMut, Env, MessageInfo, Response, StdResult};
 use cw2::set_contract_version;
-
-use crate::error::ContractError;
-use crate::msg::{ExecuteMsg, InstantiateMsg, QueryMsg};
-use crate::state::{Config, CONFIG};
 
 // version info for migration info
 const CONTRACT_NAME: &str = "crates.io:drip-price-adapter-twap-ibc";
@@ -23,19 +23,21 @@ pub fn instantiate(
         Some(a) => deps.api.addr_validate(a)?,
         None => info.sender.clone(),
     };
-    let whitelisted_caller_addrs = msg
-        .whitelisted_caller_addrs
-        .into_iter()
-        .map(|s| deps.api.addr_validate(&s))
-        .collect::<Result<Vec<_>, _>>()?;
 
     // assemble and store config
     let cfg = Config {
         admin,
-        twap_setting: msg.twap_setting,
-        whitelisted_caller_addrs,
     };
     CONFIG.save(deps.storage, &cfg)?;
+
+    // Process each setting and save it to the map
+    for setting in msg.twap_settings {
+        TWAP_SETTINGS.save(
+            deps.storage,
+            (setting.base.clone(), setting.quote.clone()),
+            &setting,
+        )?;
+    }
 
     // version for migrations
     set_contract_version(deps.storage, CONTRACT_NAME, CONTRACT_VERSION)?;
@@ -45,16 +47,19 @@ pub fn instantiate(
 
 #[cfg_attr(not(feature = "library"), entry_point)]
 pub fn execute(
-    _deps: DepsMut,
+    deps: DepsMut,
     _env: Env,
-    _info: MessageInfo,
+    info: MessageInfo,
     msg: ExecuteMsg,
 ) -> Result<Response, ContractError> {
     match msg {
-        ExecuteMsg::GetTokenPrice {
-            base_asset_denom,
-            quote_asset_denom,
-        } => unimplemented!(),
+        ExecuteMsg::RequestPrice {
+            base,
+            quote,
+            sequence,
+            valid_from,
+            expiration,
+        } => execute::request_price(deps, info.sender, base, quote, sequence, valid_from, expiration),
         ExecuteMsg::AddWhiteListedContract {
             contract_address,
         } => unimplemented!(),

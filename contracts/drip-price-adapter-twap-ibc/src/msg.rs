@@ -1,26 +1,30 @@
 use cosmwasm_schema::{cw_serde, QueryResponses};
+use cosmwasm_std::Decimal;
+use cw_utils::Expiration;
 
 #[cw_serde]
 pub struct InstantiateMsg {
     pub admin: Option<String>,
-    pub twap_setting: TwapSetting,
-    pub whitelisted_caller_addrs: Vec<String>,
+    pub twap_settings: Vec<TwapSetting>,
 }
 
 #[cw_serde]
 pub struct TwapSetting {
     pub pool_id: u64,
-    pub base_asset: String,
-    pub quote_asset: String,
-    pub base_twap_asset: String,
-    pub quote_twap_asset: String,
+    pub base: String,
+    pub quote: String,
+    pub base_twap: String,
+    pub quote_twap: String,
 }
 
 #[cw_serde]
 pub enum ExecuteMsg {
-    GetTokenPrice {
-        base_asset_denom: String,
-        quote_asset_denom: String,
+    RequestPrice {
+        base: String,
+        quote: String,
+        sequence: u64,
+        valid_from: Option<Expiration>,
+        expiration: Expiration,
     },
     AddWhiteListedContract {
         contract_address: String,
@@ -37,9 +41,11 @@ pub enum ExecuteMsg {
 }
 
 #[cw_serde]
-pub enum ContractResponseMsg {
-    ResponseTokenPrice {
-        arithmetic_twap: String
+pub enum CallbackMsg {
+    OnPriceResponse {
+        request_id: u64,
+        price: Decimal,
+        price_timestamp: u64,
     },
 }
 
