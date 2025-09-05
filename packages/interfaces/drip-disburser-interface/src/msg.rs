@@ -11,8 +11,8 @@ pub enum Duration {
 
 #[cw_serde]
 pub struct DurationLimit {
-    blocks: u64,
-    seconds: u64,
+    pub blocks: u64,
+    pub seconds: u64,
 }
 
 #[cw_serde]

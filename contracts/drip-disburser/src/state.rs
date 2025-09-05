@@ -1,5 +1,5 @@
 use cosmwasm_schema::cw_serde;
-use cosmwasm_std::{Addr, Coin};
+use cosmwasm_std::{Addr, Coin, Uint128};
 use cw_storage_plus::Item;
 use cw_utils::Expiration;
 use drip_disburser_interface::msg::DurationBounds;
@@ -16,4 +16,13 @@ pub struct Config {
     pub payout_duration_bounds: DurationBounds,
 }
 
+#[cw_serde]
+pub struct PendingPayout {
+    // pub requester: Addr,
+    // pub amount_in_quote: Option<Coin>,
+    pub amount_in_quote: Uint128,
+    pub expires_at: Expiration,
+}
+
 pub const CONFIG: Item<Config> = Item::new("config");
+pub const PENDING_PAYOUT: Item<PendingPayout> = Item::new("pending_payout");

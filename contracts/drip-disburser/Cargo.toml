@@ -33,6 +33,7 @@ thiserror.workspace = true
 cw-utils.workspace = true
 cw-controllers.workspace = true
 drip-disburser-interface.workspace = true
+drip-price-oracle-interface.workspace = true
 
 [dev-dependencies]
 cw-multi-test.workspace = true
