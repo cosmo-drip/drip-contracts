@@ -229,4 +229,161 @@ pub fn query(_deps: Deps, _env: Env, _msg: QueryMsg) -> StdResult<Binary> {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use cosmwasm_std::{
+        testing::{mock_dependencies, mock_env, mock_info, MockApi, MockQuerier},
+        from_binary, CosmosMsg, WasmMsg, Uint128, Addr, MemoryStorage, OwnedDeps,
+    };
+
+    fn seed_config(deps: &mut OwnedDeps<MemoryStorage, MockApi, MockQuerier>) {
+        use crate::state::{Config, CONFIG};
+        use drip_disburser_interface::msg::{DurationLimit, DurationBounds};
+        let cfg = Config {
+            settlement_asset_limit: cosmwasm_std::coin(0, "SETTLE"),
+            quote_asset_limit: cosmwasm_std::coin(0, "QUOTE"),
+            admin: Addr::unchecked("admin"),
+            recipient_addr: Addr::unchecked("recipient"),
+            price_feeder_addr: Addr::unchecked("oracle"),
+            payment_initiator_addrs: vec![],
+            funding_expiration: Default::default(),
+            payout_duration_bounds: DurationBounds {
+                default: DurationLimit { blocks: 10, seconds: 30 },
+                min: Some(DurationLimit { blocks: 5, seconds: 10 }),
+                max: Some(DurationLimit { blocks: 60, seconds: 300 }),
+            },
+        };
+        CONFIG.save(deps.as_mut().storage, &cfg).unwrap();
+    }
+
+    #[test]
+    fn request_payout_happy_blocks() {
+        let mut deps = mock_dependencies();
+        let mut env = mock_env();
+        seed_config(&mut deps);
+
+        env.block.height = 100;
+
+        let info = mock_info("caller", &[]);
+        let amount = Some(Uint128::new(123));
+        let duration = Some(Duration::Blocks(7));
+        let replace = Some(false);
+
+        let resp = execute_request_payout(
+            deps.as_mut(),
+            env.clone(),
+            info,
+            amount,
+            duration,
+            replace,
+        ).expect("ok");
+
+        assert_eq!(resp.messages.len(), 1);
+        let msg = &resp.messages[0].msg;
+        match msg {
+            CosmosMsg::Wasm(WasmMsg::Execute { contract_addr, msg, funds }) => {
+                assert_eq!(contract_addr, "oracle");
+                assert!(funds.is_empty());
+                let decoded: OracleExecuteMsg = from_binary(msg).unwrap();
+                match decoded {
+                    OracleExecuteMsg::RequestPrice { base, quote, expiration, valid_from, sequence } => {
+                        assert_eq!(base, "SETTLE");
+                        assert_eq!(quote, "QUOTE");
+                        assert_eq!(expiration, Expiration::AtHeight(107));
+                        assert!(valid_from.is_none());
+                        assert!(sequence.is_none());
+                    }
+                    _ => panic!("unexpected oracle msg"),
+                }
+            }
+            _ => panic!("unexpected CosmosMsg"),
+        }
+
+        use crate::state::PENDING_PAYOUT;
+        let pending = PENDING_PAYOUT.load(&deps.storage).expect("pending");
+        assert_eq!(pending.amount_in_quote, Uint128::new(123));
+        assert_eq!(pending.expires_at, Expiration::AtHeight(107));
+    }
+
+    #[test]
+    fn request_payout_happy_seconds() {
+        let mut deps = mock_dependencies();
+        let mut env = mock_env();
+        seed_config(&mut deps);
+
+        env.block.time = env.block.time.plus_seconds(1000);
+        let info = mock_info("caller", &[]);
+        let resp = execute_request_payout(
+            deps.as_mut(),
+            env.clone(),
+            info,
+            Some(Uint128::new(1)),
+            Some(Duration::Seconds(20)),
+            None,
+        ).unwrap();
+
+        let msg = &resp.messages[0].msg;
+        match msg {
+            CosmosMsg::Wasm(WasmMsg::Execute { msg, .. }) => {
+                let decoded: OracleExecuteMsg = from_binary(msg).unwrap();
+                match decoded {
+                    OracleExecuteMsg::RequestPrice { expiration, .. } => {
+                        assert_eq!(expiration, Expiration::AtTime(env.block.time.plus_seconds(20)));
+                    }
+                    _ => panic!("unexpected oracle msg"),
+                }
+            }
+            _ => panic!("unexpected CosmosMsg"),
+        }
+    }
+
+    #[test]
+    fn request_payout_reject_when_pending_and_no_replace() {
+        let mut deps = mock_dependencies();
+        let env = mock_env();
+        seed_config(&mut deps);
+
+        PENDING_PAYOUT.save(
+            deps.as_mut().storage,
+            &PendingPayout {
+                amount_in_quote: Uint128::new(5),
+                expires_at: Expiration::AtHeight(999),
+            },
+        ).unwrap();
+
+        let err = execute_request_payout(
+            deps.as_mut(),
+            env,
+            mock_info("caller", &[]),
+            Some(Uint128::new(7)),
+            Some(Duration::Blocks(6)),
+            Some(false), // replace_pending
+        ).unwrap_err();
+
+        match err {
+            ContractError::PendingAlreadyExists {} => {}
+            other => panic!("unexpected error: {other:?}"),
+        }
+    }
+
+    #[test]
+    fn normalize_duration_respects_bounds() {
+        let mut deps = mock_dependencies();
+        let env = mock_env();
+        seed_config(&mut deps);
+
+        let cfg = CONFIG.load(&deps.storage).unwrap();
+
+        // lower than min
+        let err = normalize_duration_to_expiration(&env, &cfg.payout_duration_bounds, Some(Duration::Blocks(4))).unwrap_err();
+        assert!(err.to_string().contains("duration.blocks < min"));
+
+        // bigger than max
+        let err = normalize_duration_to_expiration(&env, &cfg.payout_duration_bounds, Some(Duration::Blocks(100))).unwrap_err();
+        assert!(err.to_string().contains("duration.blocks > max"));
+
+        // in bounds
+        let ok = normalize_duration_to_expiration(&env, &cfg.payout_duration_bounds, Some(Duration::Blocks(10))).unwrap();
+        assert_eq!(ok, Expiration::AtHeight(env.block.height + 10));
+    }
+}
