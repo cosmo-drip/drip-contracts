@@ -17,4 +17,10 @@ pub enum ContractError {
         default_sec: u64,
         max_sec: u64,
     },
+    #[error("Invalid amount")]
+    InvalidAmount {},
+    #[error("Invalid payout duration: {reason}")]
+    InvalidDuration { reason: String },
+    #[error("Pending payout already exists; set replace_pending=true to overwrite")]
+    PendingAlreadyExists {},
 }

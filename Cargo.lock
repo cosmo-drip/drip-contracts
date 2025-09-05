@@ -522,6 +522,7 @@ dependencies = [
  "cw-utils",
  "cw2",
  "drip-disburser-interface",
+ "drip-price-oracle-interface",
  "schemars",
  "serde",
  "thiserror 1.0.69",
